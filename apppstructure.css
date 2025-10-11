@@ -1,0 +1,22 @@
+src/
+├── components/
+│   ├── Navbar.tsx
+│   ├── WalletConnect.tsx
+│   ├── DashboardCard.tsx
+│   ├── SensorChart.tsx
+│   └── Loader.tsx
+├── pages/
+│   ├── Home.tsx
+│   ├── Dashboard.tsx
+│   ├── DeviceDetail.tsx
+│   ├── Governance.tsx
+│   └── Marketplace.tsx
+├── hooks/
+│   ├── usePolkadot.ts
+│   └── useGraphQL.ts
+├── utils/
+│   ├── format.ts
+│   └── constants.ts
+├── App.tsx
+├── index.css
+└── main.tsx
