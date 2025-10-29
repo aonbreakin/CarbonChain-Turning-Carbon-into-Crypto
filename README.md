@@ -18,11 +18,11 @@ npm start
 ```
 
 ## Installation
-#necessary to install 
+### necessary to install 
 npm 11.6.2
 node v20.19.5
 
-#create with vite
+### create with vite
 ```bash
 npm create vite@latest carbonchain -- --template react
 ```
@@ -36,7 +36,8 @@ npm install tailwindcss @tailwindcss/vite
 #Configure the Vite plugin
 #Add the @tailwindcss/vite plugin to your Vite configuration.
 
-###vite.config.ts
+- vite.config.ts
+
 ```bash
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
