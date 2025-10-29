@@ -36,8 +36,8 @@ npm install tailwindcss @tailwindcss/vite
 #Configure the Vite plugin
 #Add the @tailwindcss/vite plugin to your Vite configuration.
 
-vite.config.ts
-
+###vite.config.ts
+```bash
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
@@ -45,6 +45,7 @@ export default defineConfig({
     tailwindcss(),
   ],
 })
+```
 
 Import Tailwind CSS
 Add an @import to your CSS file that imports Tailwind CSS.
