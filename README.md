@@ -63,3 +63,9 @@ Terminal
 npm run build
 npm run dev -- --host 0.0.0.0
 ```
+
+Install Polkadot
+
+```cmd
+npm install @polkadot/api @polkadot/extension-dapp
+```

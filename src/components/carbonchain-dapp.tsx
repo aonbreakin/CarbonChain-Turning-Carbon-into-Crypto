@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, Zap, Leaf, TrendingUp, Plus, CheckCircle, AlertCircle, Wallet, Vote, RefreshCw } from 'lucide-react';
+//import ConnectWalletAdvanced,{handleConnectWallet} from './components/ConnectWalletAdvanced.tsx';
+import { web3Enable, web3Accounts } from '@polkadot/extension-dapp';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { decodeAddress, encodeAddress, isAddress } from '@polkadot/util-crypto';
 
 const CarbonChainApp = () => {
   const [account, setAccount] = useState(null);
@@ -10,6 +14,49 @@ const CarbonChainApp = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
+  
+  const handleConnectWallet = async () => {
+	  setLoading(true);
+    try {
+      showNotification('Connecting wallet...');
+      const extensions = await web3Enable('My Polkadot DApp');
+      if (extensions.length === 0) {
+        showNotification('No Polkadot extension found. Please install one.');
+		setLoading(false);
+        return;
+      }
+
+      const accounts = await web3Accounts();
+      if (accounts.length === 0) {
+        showNotification('No accounts found in wallet.');
+		setLoading(false);
+        return;
+      }
+	  
+      const acc = accounts[0];
+      setAccount({
+		  address: `${acc.address}`,
+		  name: 'Carbon Capture Node'});
+      showNotification(`Wallet connected: ${acc.address}`,'success');
+	  
+	  const provider = new WsProvider('wss://westend-rpc.polkadot.io'); // Westend Testnet RPC
+      const api = await ApiPromise.create({ provider });
+
+      // Query free balance
+      const { data: balanceData } = await api.query.system.account(walletAddress);
+      const freeBalance = balanceData.free.toHuman();
+      
+	  
+	  setBalance({ DOT: `${freeBalance}`, CET: 847.32 });
+      loadInitialData();
+      showNotification('Wallet connected successfully', 'success');
+      
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setStatus('Failed to connect wallet.');
+    }
+  };
 
   const connectWallet = async () => {
     setLoading(true);
@@ -480,8 +527,10 @@ const CarbonChainApp = () => {
                 </div>
               </div>
             ) : (
+				
               <button
-                onClick={connectWallet}
+                //onClick={connectWallet}
+				onClick={handleConnectWallet}
                 disabled={loading}
                 className="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold flex items-center gap-2"
               >
@@ -554,7 +603,7 @@ const CarbonChainApp = () => {
             </div>
           </div>
           <button
-            onClick={connectWallet}
+            onClick={handleConnectWallet}
             disabled={loading}
             className="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-white px-8 py-4 rounded-lg font-bold text-lg flex items-center gap-3 mx-auto"
           >
