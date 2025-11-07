@@ -69,3 +69,8 @@ Install Polkadot
 ```cmd
 npm install @polkadot/api @polkadot/extension-dapp
 ```
+
+install polkadot extension follow:
+```http
+https://polkadot.js.org/
+```
