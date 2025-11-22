@@ -33,25 +33,28 @@ const CarbonChainApp = () => {
         return;
       }
 	  
+	  
       const acc = accounts[0];
       setAccount({
 		  address: `${acc.address}`,
-		  name: 'Carbon Capture Node'});
-      showNotification(`Wallet connected: ${acc.address}`,'success');
+		  name: 'Carbon Capture Node'})
+      showNotification(`Wallet connected: ${acc.address}`,'connecting');
 	  
-	  const provider = new WsProvider('wss://westend-rpc.polkadot.io'); // Westend Testnet RPC
-      const api = await ApiPromise.create({ provider });
-
-      // Query free balance
-      const { data: balanceData } = await api.query.system.account(walletAddress);
-      const freeBalance = balanceData.free.toHuman();
-      
+	  //const provider = new WsProvider('wss://westend-rpc.polkadot.io'); // Westend Testnet RPC
+	  const Provider = new WsProvider('wss://rpc.polkadot.io');
+      //const api = await ApiPromise.create({ provider });
+	  // Initialize the API
+	  const api = await ApiPromise.create({ provider: Provider });
+	  showNotification('loaded provider','connecting');
 	  
-	  setBalance({ DOT: `${freeBalance}`, CET: 847.32 });
-      loadInitialData();
+	  // Get account information
+	  const { nonce, data: balance } = await api.query.system.account(`${acc.address}`);
+	  setBalance({ DOT: parseFloat(`${balance.free}`), CET: 847.32 });
+	  
       showNotification('Wallet connected successfully', 'success');
-      
+	  loadInitialData();
       setLoading(false);
+      
     } catch (err) {
       console.error(err);
       setStatus('Failed to connect wallet.');
@@ -520,6 +523,10 @@ const CarbonChainApp = () => {
                 <div className="text-right">
                   <div className="text-sm text-gray-400">Connected</div>
                   <div className="font-mono text-sm">{account.address.slice(0, 8)}...{account.address.slice(-6)}</div>
+                </div>
+				<div className="bg-gray-800 rounded-lg px-4 py-2">
+                  <div className="text-xs text-gray-400">DOT Balance</div>
+                  <div className="font-bold text-green-400">{balance.DOT.toFixed(2)}</div>
                 </div>
                 <div className="bg-gray-800 rounded-lg px-4 py-2">
                   <div className="text-xs text-gray-400">CET Balance</div>
